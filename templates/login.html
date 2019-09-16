@@ -12,7 +12,30 @@
 </head>
 <body>
 <div style="width: 150px;margin: 0 auto;">
-    <img width="150" src="https://login.weixin.qq.com/qrcode/{{qcode}}" alt="">
+    <img id="user_avator" width="150" src="https://login.weixin.qq.com/qrcode/{{qcode}}" alt="">
 </div>
 </body>
+<script src="../static/js/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        check_login();
+    });
+
+    function check_login() {
+        $.ajax({
+            url: '/check/login',
+            method: 'GET',
+            dataType: 'json',
+            success: function (arg) {
+                console.log(arg);
+                //check_login();
+                if (arg.code == 408) {
+                    check_login();
+                } else if (arg.code == 201) {
+                    $('#user_avator').attr('src', arg.avatar);
+                }
+            }
+        })
+    }
+</script>
 </html>
