@@ -73,7 +73,24 @@ def check_login():
 
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    pass_ticket = session['ticket_dict']['pass_ticket']
+    init_url = 'xxx&pass_ticket={0}'.format(pass_ticket)
+    rep = requests.post(
+        url=init_url,
+        json={
+            'BaseRequest': {
+                'DeviceID': 'xxx',
+                'Sid': session['ticket_dict']['wxsid'],
+                'Skey': session['ticket_dict']['skey'],
+                'Uin': session['ticket_dict']['wxuin'],
+            }
+        }
+    )
+    rep.encoding = 'utf-8'  # 内部拿到字节转换成字符串
+    # json.loads将字符串转换成json，但是内部会做，使用rep.json
+    init_user_dict = rep.json()
+    print(init_user_dict)
+    return render_template('index.html', init_user_dict=init_user_dict)
 
 
 if __name__ == '__main__':
