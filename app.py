@@ -47,12 +47,24 @@ def check_login():
     result = {'code': '408'}
     if 'window.code=408' in rep.text:
         # 用户没有扫码
-        return jsonify(result)
+        result['code'] = 408
     elif 'window.code=201' in rep.text:
         # 用户扫码，没有确认登录
         result['avatar'] = re.findall("window.userAvatar = '(.*)';", rep.text)[0]
         result['code'] = 201
-        return jsonify(result)
+    # print(rep.text)  # 如果返回window.code=200则确认登录
+    # window.redirect_uri = "https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=Ay-w09wa6tpYoi8_49VcmwBn@qrticket_0&uuid=AcpaAnB8rg==&lang=zh_CN&scan=1568596803";
+    elif 'window.code=200' in rep.text:
+        # 用户确认登录
+        redirect_uri = re.findall('window.redirect_uri="(.*)";', rep.text)[0]
+        print(redirect_uri)
+        result['code'] = 200
+    return jsonify(result)
+
+
+@app.route('/index')
+def index():
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
