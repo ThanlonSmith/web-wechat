@@ -33,6 +33,9 @@
                     check_login();
                 } else if (arg.code == 201) {
                     $('#user_avator').attr('src', arg.avatar);
+                    check_login();
+                } else if (arg.code == 200) {
+                    location.href = '/index'
                 }
             }
         })
