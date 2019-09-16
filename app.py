@@ -3,6 +3,7 @@ from flask import Flask, render_template, session, jsonify
 import time
 import requests
 import re
+from xml_parser import xml_parse
 
 app = Flask(__name__)
 app.secret_key = 'thanlon'
@@ -58,7 +59,15 @@ def check_login():
         # 用户确认登录
         redirect_uri = re.findall('window.redirect_uri="(.*)";', rep.text)[0]
         print(redirect_uri)
+        # https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=A22WujWQbYmgsT5rFV5_mDJd@qrticket_0&uuid=Ieoz30KGUQ==&lang=zh_CN&scan=1568602836
+        redirect_uri = redirect_uri + '&fun=new&version=v2'
+        ru = requests.get(
+            url=redirect_uri,
+        )
+        print(ru.text)  # 凭证内容
         result['code'] = 200
+        ticket_dict = xml_parse(ru.text)
+        session['ticket_dict'] = ticket_dict
     return jsonify(result)
 
 
