@@ -33,7 +33,8 @@
                     check_login();
                 } else if (arg.code == 201) {
                     $('#user_avator').attr('src', arg.avatar);
-                    check_login();
+                    // check_login();
+                    setTimeout(check_login,8000);
                 } else if (arg.code == 200) {
                     location.href = '/index'
                 }
