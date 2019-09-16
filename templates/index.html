@@ -5,6 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-
+当前用户：{{init_user_dict.User.NickName}}
+最近联系人：
+{%for row in init_user_dict.ContactList%}
+<li>{{row.NickName}}</li>
+{%endfor%}
+所有联系人：
+<a href=""></a>
+最近的公众号：
+{%for item in init_user_dict.MPSubscribeMsgList%}
+{{item.NickName}}
+{%for msg in item%}
+<li><a href="{{msg.Url}}">{{msg.Title}}</a></li>
+{%endfor%}
+{%endfor%}
 </body>
 </html>
